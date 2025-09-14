@@ -16,7 +16,7 @@ const IngredientsView = ({
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-        {/* Header */}
+
         <div className="flex items-center gap-4 p-6 border-b border-gray-200">
           <button
             onClick={onBack}
@@ -27,7 +27,7 @@ const IngredientsView = ({
           <h2 className="text-xl font-semibold">Ingredient Details</h2>
         </div>
 
-        {/* Dish Info */}
+
         <div className="p-6">
           <img
             src={getDishImage(dish)}
@@ -55,10 +55,9 @@ const IngredientsView = ({
             </span>
           </div>
 
-          {/* Ingredients List */}
+
           <IngredientList ingredients={ingredients} />
 
-          {/* Action Buttons */}
           <div className="flex gap-3">
             <button
               onClick={onBack}

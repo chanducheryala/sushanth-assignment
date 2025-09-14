@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import MenuView from './components/MenuView';
 import IngredientsView from './components/IngredientsView';
 import { mockDishes, mockIngredients, mealTypes } from './data/mockdata';
 
 const App = () => {
-  const [currentView, setCurrentView] = useState('menu'); // 'menu' or 'ingredients'
   const [selectedMealType, setSelectedMealType] = useState('MAIN COURSE');
   const [selectedDishes, setSelectedDishes] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [vegFilter, setVegFilter] = useState(true);
   const [nonVegFilter, setNonVegFilter] = useState(true);
-  const [selectedDishForIngredients, setSelectedDishForIngredients] = useState(null);
+  const navigate = useNavigate();
 
   // Filter dishes based on selected meal type, search term, and veg/non-veg filters
   const filteredDishes = mockDishes.filter(dish => {
@@ -48,10 +48,9 @@ const App = () => {
     return selectedDishes.some(d => d.id === dishId);
   };
 
-  // Show ingredients for a dish
+  // Show ingredients for a dish via routing
   const showIngredients = (dish) => {
-    setSelectedDishForIngredients(dish);
-    setCurrentView('ingredients');
+    navigate(`/ingredients/${dish.id}`);
   };
 
   // Get dish image or fallback
@@ -65,8 +64,7 @@ const App = () => {
 
   // Handle back to menu from ingredients view
   const handleBackToMenu = () => {
-    setCurrentView('menu');
-    setSelectedDishForIngredients(null);
+    navigate('/');
   };
 
   // Handle continue button click
@@ -75,42 +73,55 @@ const App = () => {
     // Add navigation logic here if needed
   };
 
+  const IngredientsRoute = () => {
+    const { id } = useParams();
+    const dishId = Number(id);
+    const dish = mockDishes.find(d => d.id === dishId) || null;
+    const ingredients = dish ? (mockIngredients[dish.id] || []) : [];
+    const selected = dish ? isDishSelected(dish.id) : false;
+    return (
+      <IngredientsView
+        dish={dish}
+        ingredients={ingredients}
+        isSelected={selected}
+        onBack={handleBackToMenu}
+        onAddDish={addDish}
+        onRemoveDish={removeDish}
+        getDishImage={getDishImage}
+      />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      {currentView === 'menu' && (
-        <MenuView
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          vegFilter={vegFilter}
-          nonVegFilter={nonVegFilter}
-          onVegChange={setVegFilter}
-          onNonVegChange={setNonVegFilter}
-          mealTypes={mealTypes}
-          selectedMealType={selectedMealType}
-          onMealTypeChange={setSelectedMealType}
-          getSelectedCountByMealType={getSelectedCountByMealType}
-          filteredDishes={filteredDishes}
-          selectedDishes={selectedDishes}
-          onAddDish={addDish}
-          onRemoveDish={removeDish}
-          onShowIngredients={showIngredients}
-          getDishImage={getDishImage}
-          getTotalSelectedCount={getTotalSelectedCount}
-          onContinue={handleContinue}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MenuView
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              vegFilter={vegFilter}
+              nonVegFilter={nonVegFilter}
+              onVegChange={setVegFilter}
+              onNonVegChange={setNonVegFilter}
+              mealTypes={mealTypes}
+              selectedMealType={selectedMealType}
+              onMealTypeChange={setSelectedMealType}
+              getSelectedCountByMealType={getSelectedCountByMealType}
+              filteredDishes={filteredDishes}
+              selectedDishes={selectedDishes}
+              onAddDish={addDish}
+              onRemoveDish={removeDish}
+              onShowIngredients={showIngredients}
+              getDishImage={getDishImage}
+              getTotalSelectedCount={getTotalSelectedCount}
+              onContinue={handleContinue}
+            />
+          }
         />
-      )}
-      
-      {currentView === 'ingredients' && (
-        <IngredientsView
-          dish={selectedDishForIngredients}
-          ingredients={mockIngredients[selectedDishForIngredients?.id] || []}
-          isSelected={isDishSelected(selectedDishForIngredients?.id)}
-          onBack={handleBackToMenu}
-          onAddDish={addDish}
-          onRemoveDish={removeDish}
-          getDishImage={getDishImage}
-        />
-      )}
+        <Route path="/ingredients/:id" element={<IngredientsRoute />} />
+      </Routes>
     </div>
   );
 };

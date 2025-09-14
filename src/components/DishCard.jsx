@@ -4,19 +4,30 @@ import { Plus, Eye } from 'lucide-react';
 const DishCard = ({ dish, isSelected, onAdd, onRemove, onShowIngredients, getDishImage }) => {
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <img 
-        src={getDishImage(dish)} 
-        alt={dish.name}
-        className="w-full h-48 object-cover bg-gray-100"
-        onError={(e) => {
-          e.currentTarget.src = 'https://placehold.co/300x200?text=No+Image';
-        }}
-      />
+      <div className="relative">
+        <img 
+          src={getDishImage(dish)} 
+          alt={dish.name}
+          className="w-full h-48 object-cover bg-gray-100"
+          onError={(e) => {
+            e.currentTarget.src = 'https://placehold.co/300x200?text=No+Image';
+          }}
+        />
+        <div
+          className={`absolute top-2 left-2 inline-flex items-center gap-2 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm border ${dish.type === 'VEG' ? 'bg-white/90 text-green-700 border-green-600' : 'bg-white/90 text-red-700 border-red-600'}`}
+        >
+          <span
+            className={`inline-flex items-center justify-center w-3.5 h-3.5 rounded-[2px] border ${dish.type === 'VEG' ? 'border-green-600' : 'border-red-600'}`}
+          >
+            <span className={`${dish.type === 'VEG' ? 'bg-green-600' : 'bg-red-600'} w-2 h-2 rounded-full`} />
+          </span>
+          {dish.type === 'VEG' ? 'Veg' : 'Non-Veg'}
+        </div>
+      </div>
       
       <div className="p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-semibold text-lg">{dish.name}</h3>
-          <div className={`w-3 h-3 rounded-full ${dish.type === 'VEG' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+        <div className="flex items-start justify-between gap-2 mb-2">
+          <h3 className="font-semibold text-lg leading-snug line-clamp-2">{dish.name}</h3>
         </div>
         
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">{dish.description}</p>

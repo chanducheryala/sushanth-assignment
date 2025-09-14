@@ -1,32 +1,31 @@
 import React from 'react';
+import Switch from './Toggle';
 
 const VegFilter = ({ vegFilter, nonVegFilter, onVegChange, onNonVegChange }) => {
   return (
-    <div className="flex gap-4 mb-6">
-      <label className="flex items-center gap-2 cursor-pointer">
-        <input 
-          type="checkbox" 
-          checked={vegFilter}
-          onChange={(e) => onVegChange(e.target.checked)}
-          className="w-4 h-4 text-green-600 rounded focus:ring-green-500"
+    <div className="flex flex-wrap items-center gap-8 mb-6">
+      <div className="flex items-center gap-3">
+        <Switch
+          isOn={vegFilter}
+          onToggle={() => onVegChange(!vegFilter)}
+          color="green"
         />
-        <span className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+        <span className="select-none text-sm text-gray-800 flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-green-600" />
           Veg
         </span>
-      </label>
-      <label className="flex items-center gap-2 cursor-pointer">
-        <input 
-          type="checkbox" 
-          checked={nonVegFilter}
-          onChange={(e) => onNonVegChange(e.target.checked)}
-          className="w-4 h-4 text-red-600 rounded focus:ring-red-500"
+      </div>
+      <div className="flex items-center gap-3">
+        <Switch
+          isOn={nonVegFilter}
+          onToggle={() => onNonVegChange(!nonVegFilter)}
+          color="red"
         />
-        <span className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+        <span className="select-none text-sm text-gray-800 flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-red-600" />
           Non-Veg
         </span>
-      </label>
+      </div>
     </div>
   );
 };

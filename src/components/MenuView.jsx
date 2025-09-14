@@ -27,18 +27,16 @@ const MenuView = ({
 }) => {
   return (
     <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
+
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Party Menu Selection</h1>
         
-        {/* Search Bar */}
         <SearchBar 
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
           placeholder="Search dishes..."
         />
 
-        {/* Veg/Non-Veg Filters */}
         <VegFilter 
           vegFilter={vegFilter}
           nonVegFilter={nonVegFilter}
@@ -46,7 +44,6 @@ const MenuView = ({
           onNonVegChange={onNonVegChange}
         />
 
-        {/* Meal Type Tabs */}
         <MealTypeTabs 
           mealTypes={mealTypes}
           selectedMealType={selectedMealType}
@@ -55,7 +52,6 @@ const MenuView = ({
         />
       </div>
 
-      {/* Dishes List */}
       <DishList 
         dishes={filteredDishes}
         selectedMealType={selectedMealType}
@@ -66,7 +62,6 @@ const MenuView = ({
         getDishImage={getDishImage}
       />
 
-      {/* Bottom Summary */}
       <SelectionSummary 
         totalCount={getTotalSelectedCount()}
         mealTypes={mealTypes}
