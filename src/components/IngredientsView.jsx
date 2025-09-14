@@ -1,16 +1,25 @@
-const IngredientsView = () => {
-  if (!selectedDishForIngredients) return null;
+import React from 'react';
+import { ArrowLeft, Plus, Minus } from 'lucide-react';
+import IngredientList from './IngredientList';
 
-  const ingredients = mockIngredients[selectedDishForIngredients.id] || [];
+const IngredientsView = ({
+  dish,
+  ingredients = [],
+  isSelected = false,
+  onBack,
+  onAddDish,
+  onRemoveDish,
+  getDishImage,
+}) => {
+  if (!dish) return null;
 
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
-       
         {/* Header */}
         <div className="flex items-center gap-4 p-6 border-b border-gray-200">
           <button
-            onClick={() => setCurrentView("menu")}
+            onClick={onBack}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <ArrowLeft className="w-6 h-6" />
@@ -21,75 +30,47 @@ const IngredientsView = () => {
         {/* Dish Info */}
         <div className="p-6">
           <img
-            src={getDishImage(selectedDishForIngredients)}
-            alt={selectedDishForIngredients.name}
+            src={getDishImage(dish)}
+            alt={dish.name}
             className="w-full h-48 object-cover rounded-lg mb-4 bg-gray-100"
             onError={(e) => {
-              e.target.src = "/api/placeholder/400/200";
+              e.currentTarget.src = 'https://placehold.co/400x200?text=No+Image';
             }}
           />
 
           <div className="flex items-center gap-2 mb-2">
-            <h3 className="text-2xl font-bold">
-              {selectedDishForIngredients.name}
-            </h3>
+            <h3 className="text-2xl font-bold">{dish.name}</h3>
             <div
               className={`w-4 h-4 rounded-full ${
-                selectedDishForIngredients.type === "VEG"
-                  ? "bg-green-500"
-                  : "bg-red-500"
+                dish.type === 'VEG' ? 'bg-green-500' : 'bg-red-500'
               }`}
             ></div>
           </div>
 
-          <p className="text-gray-600 mb-4">
-            {selectedDishForIngredients.description}
-          </p>
+          <p className="text-gray-600 mb-4">{dish.description}</p>
 
           <div className="text-sm text-gray-500 mb-6">
             <span className="bg-gray-100 px-3 py-1 rounded-full">
-              {selectedDishForIngredients.category.name}
+              {dish.category.name}
             </span>
           </div>
 
           {/* Ingredients List */}
-          <div className="mb-6">
-            <h4 className="text-lg font-semibold mb-4">Ingredients Required</h4>
-
-            {ingredients.length === 0 ? (
-              <p className="text-gray-500">
-                No ingredient information available.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {ingredients.map((ingredient, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
-                  >
-                    <span className="font-medium">{ingredient.name}</span>
-                    <span className="text-gray-600 font-semibold">
-                      {ingredient.quantity}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <IngredientList ingredients={ingredients} />
 
           {/* Action Buttons */}
           <div className="flex gap-3">
             <button
-              onClick={() => setCurrentView("menu")}
+              onClick={onBack}
               className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
             >
               Back to Menu
             </button>
-            {!isDishSelected(selectedDishForIngredients.id) ? (
+            {!isSelected ? (
               <button
                 onClick={() => {
-                  addDish(selectedDishForIngredients);
-                  setCurrentView("menu");
+                  onAddDish(dish);
+                  onBack && onBack();
                 }}
                 className="flex-1 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center justify-center gap-2"
               >
@@ -99,8 +80,8 @@ const IngredientsView = () => {
             ) : (
               <button
                 onClick={() => {
-                  removeDish(selectedDishForIngredients.id);
-                  setCurrentView("menu");
+                  onRemoveDish(dish.id);
+                  onBack && onBack();
                 }}
                 className="flex-1 px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium flex items-center justify-center gap-2"
               >

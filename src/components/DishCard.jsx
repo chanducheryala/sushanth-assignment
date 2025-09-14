@@ -9,7 +9,7 @@ const DishCard = ({ dish, isSelected, onAdd, onRemove, onShowIngredients, getDis
         alt={dish.name}
         className="w-full h-48 object-cover bg-gray-100"
         onError={(e) => {
-          e.target.src = '/api/placeholder/300/200';
+          e.currentTarget.src = 'https://placehold.co/300x200?text=No+Image';
         }}
       />
       

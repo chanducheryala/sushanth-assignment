@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MenuView from './components/MenuView';
 import IngredientsView from './components/IngredientsView';
-import { mockDishes, mockIngredients, mealTypes } from './data/mockData';
+import { mockDishes, mockIngredients, mealTypes } from './data/mockdata';
 
 const App = () => {
   const [currentView, setCurrentView] = useState('menu'); // 'menu' or 'ingredients'
@@ -56,7 +56,11 @@ const App = () => {
 
   // Get dish image or fallback
   const getDishImage = (dish) => {
-    return dish.image || dish.category?.image || '/api/placeholder/150/120';
+    return (
+      dish.image ||
+      dish.category?.image ||
+      'https://placehold.co/300x200?text=No+Image'
+    );
   };
 
   // Handle back to menu from ingredients view
